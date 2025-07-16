@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
   <style>
     :root{
-      --bg:#111;
+      --bg:#111;  
       --surface:#1e1e1e;
       --text:#eee;
       --accent:#ff5252;
@@ -39,6 +39,12 @@
       cursor:pointer;
     }
     #info{font-size:.9rem;}
+    .leaflet-popup-content-wrapper,
+    .leaflet-popup-tip {
+      background: var(--surface);
+      color: var(--text);
+      border-radius: var(--radius);
+    }
   </style>
 </head>
 <body>
