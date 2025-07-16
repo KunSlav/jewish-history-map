@@ -91,11 +91,14 @@
     <div id="info">Drag slider or press play to animate events.</div>
   </div>
 
-  <!-- Modal -->
+  <!-- Modal that shows 1-3 images -->
   <div id="eventModal" class="modal">
     <div class="modal-content">
       <button class="modal-close">&times;</button>
-      <img id="modalImg" src="" alt="">
+
+      <!-- image stack -->
+      <div id="imgStack" style="display:flex;gap:.5rem;flex-wrap:wrap;justify-content:center;"></div>
+
       <h2 id="modalTitle"></h2>
       <div class="year" id="modalYear"></div>
       <p id="modalDesc"></p>
@@ -131,21 +134,42 @@
 
       function yearFromVal(v){ return minYear + parseInt(v); }
 
-      // --- modal helpers ---
+      /* ---------- modal helpers ---------- */
       const modal    = document.getElementById('eventModal');
       const closeBtn = document.querySelector('.modal-close');
 
       function openModal(ev){
-        document.getElementById('modalImg').src   = ev.image || 'https://via.placeholder.com/600x250?text=No+Image';
+        const stack = document.getElementById('imgStack');
+        stack.innerHTML = '';
+
+        const urls = [
+          ev.image,                                           // wikimedia
+          `https://source.unsplash.com/600x250/?${ev.keyword || 'ancient'}&sig=${ev.id}`, // unsplash
+          `https://picsum.photos/600/250?random=${ev.id}`     // picsum
+        ].filter(Boolean);
+
+        urls.forEach(src=>{
+          const img = document.createElement('img');
+          img.src = src;
+          img.style.maxWidth = '32%';
+          img.style.height = '150px';
+          img.style.objectFit = 'cover';
+          img.style.borderRadius = 'var(--radius)';
+          img.onerror = ()=> img.remove(); // silent fallback
+          stack.appendChild(img);
+        });
+
         document.getElementById('modalTitle').textContent = ev.title;
         document.getElementById('modalYear').textContent  = ev.date.slice(0,4);
         document.getElementById('modalDesc').textContent  = ev.description;
         document.getElementById('modalSource').textContent= ev.source;
+
         modal.style.display = 'flex';
       }
       closeBtn.onclick = () => modal.style.display = 'none';
-      window.onclick   = e => { if(e.target === modal) modal.style.display = 'none'; }
+      window.onclick   = e => { if (e.target === modal) modal.style.display = 'none'; };
 
+      /* ---------- render & timeline ---------- */
       function render(year){
         layerGroup.clearLayers();
         events
