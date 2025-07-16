@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <title>Historical Jewish Persecutions</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+  <style>
+    :root{
+      --bg:#111;
+      --surface:#1e1e1e;
+      --text:#eee;
+      --accent:#ff5252;
+      --radius:6px;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;font-family:system-ui,Segoe UI,Roboto,sans-serif;color:var(--text);}
+    body{background:var(--bg);}
+    #map{height:65vh;width:100%;}
+    #timeline{
+      height:35vh;
+      background:var(--surface);
+      padding:1rem;
+      display:flex;
+      flex-direction:column;
+      gap:.5rem;
+    }
+    #controls{
+      display:flex;
+      gap:1rem;
+      align-items:center;
+    }
+    input[type=range]{flex:1;}
+    button{
+      padding:.4rem .8rem;
+      border:none;
+      border-radius:var(--radius);
+      background:var(--accent);
+      color:#fff;
+      cursor:pointer;
+    }
+    #info{
+      font-size:.9rem;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="map"></div>
+
+  <div id="timeline">
+    <div id="controls">
+      <button id="playBtn">▶</button>
+      <input type="range" id="slider" min="0" max="100" value="0"/>
+      <span id="dateLabel">1100</span>
+    </div>
+    <div id="info">Drag slider or press play to animate events.</div>
+  </div>
+
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script>
+    /***********************
+     * CONFIG
+     ***********************/
+    const events = [
+      {lat:49.292, lng:19.945, date:1096, title:"First Crusade massacres", desc:"Communities along Rhine attacked."},
+      {lat:50.075, lng:14.437, date:1389, title:"Prague pogrom", desc:"Accusations of host desecration."},
+      {lat:52.520, lng:13.405, date:1510, title:"Berlin expulsion", desc:"Jews expelled from Brandenburg."},
+      {lat:48.856, lng:2.352,  date:1615, title:"Louis XIII decree", desc:"Renewed restrictions in France."},
+      {lat:47.497, lng:19.040, date:1944, title:"Hungary deportations", desc:"Start of mass deportations to Auschwitz."}
+      // Add more above; real dataset -> fetch GeoJSON later
+    ];
+
+    /***********************
+     * MAP
+     ***********************/
+    const map = L.map('map').setView([50, 15], 4);
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+      attribution:'©OpenStreetMap ©CARTO'
+    }).addTo(map);
+
+    // Marker layer group
+    const layerGroup = L.layerGroup().addTo(map);
+
+    /***********************
+     * TIMELINE
+     ***********************/
+    const slider   = document.getElementById('slider');
+    const playBtn  = document.getElementById('playBtn');
+    const dateLbl  = document.getElementById('dateLabel');
+    const infoBox  = document.getElementById('info');
+
+    const minYear = 1000;
+    const maxYear = 2000;
+    slider.max = maxYear - minYear;
+
+    let playing = false;
+    let timer;
+
+    function yearFromVal(v){ return minYear + parseInt(v); }
+
+    function render(year){
+      layerGroup.clearLayers();
+      events
+        .filter(e => e.date <= year)
+        .forEach(e=>{
+          const m = L.circleMarker([e.lat,e.lng], {
+            radius: 7,
+            color: '#fff',
+            weight:1,
+            fillColor: '#ff5252',
+            fillOpacity: .9
+          }).addTo(layerGroup);
+          m.bindTooltip(e.title+" ("+e.date+")");
+          m.bindPopup(`<strong>${e.title}</strong><br>${e.desc}<br><em>${e.date}</em>`);
+        });
+      dateLbl.textContent = year;
+    }
+
+    slider.addEventListener('input', ()=>{
+      render(yearFromVal(slider.value));
+    });
+
+    playBtn.addEventListener('click', ()=>{
+      if(playing){
+        clearInterval(timer);
+        playBtn.textContent = "▶";
+        playing=false;
+      }else{
+        playing=true;
+        playBtn.textContent = "⏸";
+        timer = setInterval(()=>{
+          if(parseInt(slider.value) >= slider.max){
+            clearInterval(timer);
+            playing=false;
+            playBtn.textContent = "▶";
+            return;
+          }
+          slider.value = parseInt(slider.value)+1;
+          render(yearFromVal(slider.value));
+        },150);
+      }
+    });
+
+    // initial render
+    render(minYear);
+  </script>
+</body>
+</html>

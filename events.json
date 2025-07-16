@@ -1,0 +1,22 @@
+[
+  {
+    "id": "expulsion_england_1290",
+    "title": "Edict of Expulsion – England",
+    "date": "1290-07-18",
+    "lat": 51.5074,
+    "lng": -0.1278,
+    "type": "Expulsion",
+    "description": "King Edward I orders all Jews to leave England by All Saints' Day.",
+    "source": "Statute of Jewry, 1290"
+  },
+  {
+    "id": "pogrom_kishinev_1903",
+    "title": "Kishinev Pogrom",
+    "date": "1903-04-19",
+    "lat": 47.0269,
+    "lng": 28.8374,
+    "type": "Pogrom",
+    "description": "49 Jews killed, 500 wounded in two-day riots.",
+    "source": "Hayim Bialik, 'The City of Slaughter' (1903)"
+  }
+]
