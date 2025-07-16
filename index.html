@@ -2,9 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8"/>
-  <title>Historical Jewish Persecutions</title>
+  <title>Historical Jewish Persecutions (0 – 140 CE)</title>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <!-- Leaflet CSS -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
   <style>
     :root{
@@ -39,87 +38,95 @@
       color:#fff;
       cursor:pointer;
     }
-    #info{
-      font-size:.9rem;
-    }
+    #info{font-size:.9rem;}
   </style>
 </head>
 <body>
-
   <div id="map"></div>
 
   <div id="timeline">
     <div id="controls">
       <button id="playBtn">▶</button>
-      <input type="range" id="slider" min="0" max="100" value="0"/>
-      <span id="dateLabel">1100</span>
+      <input type="range" id="slider" min="0" max="140" value="0"/>
+      <span id="dateLabel">0</span>
     </div>
     <div id="info">Drag slider or press play to animate events.</div>
   </div>
 
-  <!-- Leaflet JS -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script>
     let events = [];
-  
+
     fetch('events.json')
       .then(r => r.json())
       .then(data => {
         events = data;
         initApp();
-      });
-  
+      })
+      .catch(err => console.error('Failed to load events.json:', err));
+
     function initApp(){
-      const map = L.map('map').setView([50, 15], 4);
+      const map = L.map('map').setView([32, 20], 4);
       L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
                   {attribution:'©OpenStreetMap ©CARTO'}).addTo(map);
-  
+
       const layerGroup = L.layerGroup().addTo(map);
-  
+
       const slider   = document.getElementById('slider');
       const playBtn  = document.getElementById('playBtn');
       const dateLbl  = document.getElementById('dateLabel');
-  
+
       const minYear = 0;
       const maxYear = 140;
-      slider.max = maxYear - minYear;
-  
-      let playing = false, timer;
-  
+
+      let playing = false;
+      let timer;
+
       function yearFromVal(v){ return minYear + parseInt(v); }
-  
+
       function render(year){
         layerGroup.clearLayers();
-        events.filter(e => Number(e.date.slice(0,4)) <= year)
-              .forEach(e=>{
-                const m = L.circleMarker([e.lat,e.lng], {
-                  radius: 8,
-                  color:'#fff',
-                  weight:1,
-                  fillColor:'#ff5252',
-                  fillOpacity:.9
-                }).addTo(layerGroup);
-                m.bindTooltip(e.title);
-                m.bindPopup(`<strong>${e.title}</strong><br>${e.description}<br><em>Source: ${e.source}</em>`);
-              });
+        events
+          .filter(e => Number(e.date.slice(0,4)) <= year)
+          .forEach(e=>{
+            const m = L.circleMarker([e.lat,e.lng], {
+              radius: 8,
+              color:'#fff',
+              weight:1,
+              fillColor:'#ff5252',
+              fillOpacity:.9
+            }).addTo(layerGroup);
+            m.bindTooltip(e.title);
+            m.bindPopup(`<strong>${e.title}</strong><br>${e.description}<br><em>Source: ${e.source}</em>`);
+          });
         dateLbl.textContent = year;
       }
-  
+
       slider.addEventListener('input', ()=>render(yearFromVal(slider.value)));
+
       playBtn.addEventListener('click', ()=>{
         if(playing){
-          clearInterval(timer); playBtn.textContent='▶'; playing=false;
+          clearInterval(timer);
+          playBtn.textContent = "▶";
+          playing=false;
         }else{
-          playing=true; playBtn.textContent='⏸';
+          playing=true;
+          playBtn.textContent = "⏸";
           timer = setInterval(()=>{
-            if(parseInt(slider.value)>=slider.max){ clearInterval(timer); playing=false; playBtn.textContent='▶'; return; }
+            if(parseInt(slider.value) >= slider.max){
+              clearInterval(timer);
+              playing=false;
+              playBtn.textContent = "▶";
+              return;
+            }
             slider.value = parseInt(slider.value)+1;
             render(yearFromVal(slider.value));
           },200);
         }
       });
+
       render(minYear);
     }
-  </script> 
+  </script>
 </body>
 </html>
