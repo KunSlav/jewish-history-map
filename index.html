@@ -60,91 +60,66 @@
   <!-- Leaflet JS -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script>
-    /***********************
-     * CONFIG
-     ***********************/
-    const events = [
-      {lat:49.292, lng:19.945, date:1096, title:"First Crusade massacres", desc:"Communities along Rhine attacked."},
-      {lat:50.075, lng:14.437, date:1389, title:"Prague pogrom", desc:"Accusations of host desecration."},
-      {lat:52.520, lng:13.405, date:1510, title:"Berlin expulsion", desc:"Jews expelled from Brandenburg."},
-      {lat:48.856, lng:2.352,  date:1615, title:"Louis XIII decree", desc:"Renewed restrictions in France."},
-      {lat:47.497, lng:19.040, date:1944, title:"Hungary deportations", desc:"Start of mass deportations to Auschwitz."}
-      // Add more above; real dataset -> fetch GeoJSON later
-    ];
-
-    /***********************
-     * MAP
-     ***********************/
-    const map = L.map('map').setView([50, 15], 4);
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-      attribution:'©OpenStreetMap ©CARTO'
-    }).addTo(map);
-
-    // Marker layer group
-    const layerGroup = L.layerGroup().addTo(map);
-
-    /***********************
-     * TIMELINE
-     ***********************/
-    const slider   = document.getElementById('slider');
-    const playBtn  = document.getElementById('playBtn');
-    const dateLbl  = document.getElementById('dateLabel');
-    const infoBox  = document.getElementById('info');
-
-    const minYear = 1000;
-    const maxYear = 2000;
-    slider.max = maxYear - minYear;
-
-    let playing = false;
-    let timer;
-
-    function yearFromVal(v){ return minYear + parseInt(v); }
-
-    function render(year){
-      layerGroup.clearLayers();
-      events
-        .filter(e => e.date <= year)
-        .forEach(e=>{
-          const m = L.circleMarker([e.lat,e.lng], {
-            radius: 7,
-            color: '#fff',
-            weight:1,
-            fillColor: '#ff5252',
-            fillOpacity: .9
-          }).addTo(layerGroup);
-          m.bindTooltip(e.title+" ("+e.date+")");
-          m.bindPopup(`<strong>${e.title}</strong><br>${e.desc}<br><em>${e.date}</em>`);
-        });
-      dateLbl.textContent = year;
-    }
-
-    slider.addEventListener('input', ()=>{
-      render(yearFromVal(slider.value));
-    });
-
-    playBtn.addEventListener('click', ()=>{
-      if(playing){
-        clearInterval(timer);
-        playBtn.textContent = "▶";
-        playing=false;
-      }else{
-        playing=true;
-        playBtn.textContent = "⏸";
-        timer = setInterval(()=>{
-          if(parseInt(slider.value) >= slider.max){
-            clearInterval(timer);
-            playing=false;
-            playBtn.textContent = "▶";
-            return;
-          }
-          slider.value = parseInt(slider.value)+1;
-          render(yearFromVal(slider.value));
-        },150);
+    let events = [];
+  
+    fetch('events.json')
+      .then(r => r.json())
+      .then(data => {
+        events = data;
+        initApp();
+      });
+  
+    function initApp(){
+      const map = L.map('map').setView([50, 15], 4);
+      L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
+                  {attribution:'©OpenStreetMap ©CARTO'}).addTo(map);
+  
+      const layerGroup = L.layerGroup().addTo(map);
+  
+      const slider   = document.getElementById('slider');
+      const playBtn  = document.getElementById('playBtn');
+      const dateLbl  = document.getElementById('dateLabel');
+  
+      const minYear = 1000;
+      const maxYear = 2000;
+      slider.max = maxYear - minYear;
+  
+      let playing = false, timer;
+  
+      function yearFromVal(v){ return minYear + parseInt(v); }
+  
+      function render(year){
+        layerGroup.clearLayers();
+        events.filter(e => Number(e.date.slice(0,4)) <= year)
+              .forEach(e=>{
+                const m = L.circleMarker([e.lat,e.lng], {
+                  radius: 8,
+                  color:'#fff',
+                  weight:1,
+                  fillColor:'#ff5252',
+                  fillOpacity:.9
+                }).addTo(layerGroup);
+                m.bindTooltip(e.title);
+                m.bindPopup(`<strong>${e.title}</strong><br>${e.description}<br><em>Source: ${e.source}</em>`);
+              });
+        dateLbl.textContent = year;
       }
-    });
-
-    // initial render
-    render(minYear);
+  
+      slider.addEventListener('input', ()=>render(yearFromVal(slider.value)));
+      playBtn.addEventListener('click', ()=>{
+        if(playing){
+          clearInterval(timer); playBtn.textContent='▶'; playing=false;
+        }else{
+          playing=true; playBtn.textContent='⏸';
+          timer = setInterval(()=>{
+            if(parseInt(slider.value)>=slider.max){ clearInterval(timer); playing=false; playBtn.textContent='▶'; return; }
+            slider.value = parseInt(slider.value)+1;
+            render(yearFromVal(slider.value));
+          },200);
+        }
+      });
+      render(minYear);
+    }
   </script>
 </body>
 </html>
