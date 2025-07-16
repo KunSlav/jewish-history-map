@@ -139,33 +139,34 @@
       const closeBtn = document.querySelector('.modal-close');
 
       function openModal(ev){
-        const stack = document.getElementById('imgStack');
-        stack.innerHTML = '';
+  const stack = document.getElementById('imgStack');
+  stack.innerHTML = '';
 
-        const urls = [
-          ev.image,                                           // wikimedia
-          `https://source.unsplash.com/600x250/?${ev.keyword || 'ancient'}&sig=${ev.id}`, // unsplash
-          `https://picsum.photos/600/250?random=${ev.id}`     // picsum
-        ].filter(Boolean);
+  // 1. guaranteed Wikimedia (no fallback removal)
+  const wiki = document.createElement('img');
+  wiki.src = ev.image || 'https://via.placeholder.com/600x250?text=No+Image';
+  wiki.style.maxWidth = '32%'; wiki.style.height = '150px'; wiki.style.objectFit = 'cover';
+  stack.appendChild(wiki);
 
-        urls.forEach(src=>{
-          const img = document.createElement('img');
-          img.src = src;
-          img.style.maxWidth = '32%';
-          img.style.height = '150px';
-          img.style.objectFit = 'cover';
-          img.style.borderRadius = 'var(--radius)';
-          img.onerror = ()=> img.remove(); // silent fallback
-          stack.appendChild(img);
-        });
+  // 2. optional Unsplash / Picsum with fallback
+  const aux = [
+    `https://source.unsplash.com/600x250/?${ev.keyword}&sig=${ev.id}`,
+    `https://picsum.photos/600/250?random=${ev.id}`
+  ];
+  aux.forEach(src=>{
+    const img = document.createElement('img');
+    img.src = src;
+    img.style.maxWidth = '32%'; img.style.height = '150px'; img.style.objectFit = 'cover';
+    img.onerror = () => img.remove();
+    stack.appendChild(img);
+  });
 
-        document.getElementById('modalTitle').textContent = ev.title;
-        document.getElementById('modalYear').textContent  = ev.date.slice(0,4);
-        document.getElementById('modalDesc').textContent  = ev.description;
-        document.getElementById('modalSource').textContent= ev.source;
-
-        modal.style.display = 'flex';
-      }
+  document.getElementById('modalTitle').textContent  = ev.title;
+  document.getElementById('modalYear').textContent   = ev.date.slice(0,4);
+  document.getElementById('modalDesc').textContent   = ev.description;
+  document.getElementById('modalSource').textContent = ev.source;
+  modal.style.display = 'flex';
+}
       closeBtn.onclick = () => modal.style.display = 'none';
       window.onclick   = e => { if (e.target === modal) modal.style.display = 'none'; };
 
