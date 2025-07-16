@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
   <style>
     :root{
-      --bg:#111;  
+      --bg:#111;
       --surface:#1e1e1e;
       --text:#eee;
       --accent:#ff5252;
@@ -39,11 +39,43 @@
       cursor:pointer;
     }
     #info{font-size:.9rem;}
-    .leaflet-popup-content-wrapper,
-    .leaflet-popup-tip {
-      background: var(--surface);
-      color: var(--text);
-      border-radius: var(--radius);
+
+    /* --- modal overlay --- */
+    .modal{
+      position:fixed;
+      inset:0;
+      background:rgba(0,0,0,.85);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      z-index:9999;
+    }
+    .modal-content{
+      background:var(--surface);
+      border-radius:var(--radius);
+      max-width:600px;
+      width:90%;
+      max-height:85vh;
+      overflow-y:auto;
+      padding:1.5rem;
+      color:var(--text);
+      box-shadow:0 0 25px #000;
+      text-align:center;
+    }
+    .modal img{
+      width:100%;
+      max-height:250px;
+      object-fit:cover;
+      border-radius:var(--radius);
+      margin-bottom:1rem;
+    }
+    .modal h2{margin:.5rem 0 .25rem;font-size:2rem;}
+    .modal .year{font-size:1.4rem;margin-bottom:.5rem;color:var(--accent);}
+    .modal .source{font-weight:bold;font-style:italic;}
+    .modal-close{
+      position:absolute;
+      top:.75rem;right:.75rem;
+      background:none;border:none;font-size:1.5rem;color:var(--text);cursor:pointer;
     }
   </style>
 </head>
@@ -59,16 +91,25 @@
     <div id="info">Drag slider or press play to animate events.</div>
   </div>
 
+  <!-- Modal -->
+  <div id="eventModal" class="modal">
+    <div class="modal-content">
+      <button class="modal-close">&times;</button>
+      <img id="modalImg" src="" alt="">
+      <h2 id="modalTitle"></h2>
+      <div class="year" id="modalYear"></div>
+      <p id="modalDesc"></p>
+      <p class="source" id="modalSource"></p>
+    </div>
+  </div>
+
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script>
     let events = [];
 
     fetch('events.json')
       .then(r => r.json())
-      .then(data => {
-        events = data;
-        initApp();
-      })
+      .then(data => { events = data; initApp(); })
       .catch(err => console.error('Failed to load events.json:', err));
 
     function initApp(){
@@ -90,20 +131,32 @@
 
       function yearFromVal(v){ return minYear + parseInt(v); }
 
+      // --- modal helpers ---
+      const modal    = document.getElementById('eventModal');
+      const closeBtn = document.querySelector('.modal-close');
+
+      function openModal(ev){
+        document.getElementById('modalImg').src   = ev.image || 'https://via.placeholder.com/600x250?text=No+Image';
+        document.getElementById('modalTitle').textContent = ev.title;
+        document.getElementById('modalYear').textContent  = ev.date.slice(0,4);
+        document.getElementById('modalDesc').textContent  = ev.description;
+        document.getElementById('modalSource').textContent= ev.source;
+        modal.style.display = 'flex';
+      }
+      closeBtn.onclick = () => modal.style.display = 'none';
+      window.onclick   = e => { if(e.target === modal) modal.style.display = 'none'; }
+
       function render(year){
         layerGroup.clearLayers();
         events
           .filter(e => Number(e.date.slice(0,4)) <= year)
           .forEach(e=>{
             const m = L.circleMarker([e.lat,e.lng], {
-              radius: 8,
-              color:'#fff',
-              weight:1,
-              fillColor:'#ff5252',
-              fillOpacity:.9
+              radius: 8, color:'#fff', weight:1,
+              fillColor:'#ff5252', fillOpacity:.9
             }).addTo(layerGroup);
             m.bindTooltip(e.title);
-            m.bindPopup(`<strong>${e.title}</strong><br>${e.description}<br><em>Source: ${e.source}</em>`);
+            m.on('click', ()=> openModal(e));
           });
         dateLbl.textContent = year;
       }
@@ -113,16 +166,16 @@
       playBtn.addEventListener('click', ()=>{
         if(playing){
           clearInterval(timer);
-          playBtn.textContent = "▶";
+          playBtn.textContent='▶';
           playing=false;
         }else{
           playing=true;
-          playBtn.textContent = "⏸";
+          playBtn.textContent='⏸';
           timer = setInterval(()=>{
-            if(parseInt(slider.value) >= slider.max){
+            if(parseInt(slider.value)>=slider.max){
               clearInterval(timer);
               playing=false;
-              playBtn.textContent = "▶";
+              playBtn.textContent='▶';
               return;
             }
             slider.value = parseInt(slider.value)+1;
