@@ -95,16 +95,21 @@
   <div id="eventModal" class="modal">
     <div class="modal-content">
       <button class="modal-close">&times;</button>
-
+    
       <!-- image stack -->
       <div id="imgStack" style="display:flex;gap:.5rem;flex-wrap:wrap;justify-content:center;"></div>
-
+    
       <h2 id="modalTitle"></h2>
       <div class="year" id="modalYear"></div>
       <p id="modalDesc"></p>
       <p class="source" id="modalSource"></p>
+    
+      <!-- new link -->
+      <p style="margin-top:1rem">
+        <a id="modalLink" href="#" target="_blank" rel="noopener noreferrer"
+           style="color:var(--accent);font-weight:bold;">Read more on Wikipedia →</a>
+      </p>
     </div>
-  </div>
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script>
@@ -141,26 +146,30 @@
       function openModal(ev){
         const stack = document.getElementById('imgStack');
         stack.innerHTML = '';
-  
-        /* 1. try Wikimedia REST API -------------------- */
-        const wikiTitle = ev.wikiTitle || ev.title.replace(/ /g,'_');
-        fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(wikiTitle)}?origin=*`)
+
+        // build Wikipedia URL
+        const title = ev.wikiTitle || ev.title.replace(/ /g,'_');
+        const wikiUrl = `https://en.wikipedia.org/wiki/${encodeURIComponent(title)}`;
+        document.getElementById('modalLink').href = wikiUrl;
+
+        /* images: same as before */
+        fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(title)}?origin=*`)
           .then(r => r.ok ? r.json() : Promise.reject())
           .then(data => {
             const img = document.createElement('img');
             img.src = data.thumbnail ? data.thumbnail.source.replace(/\/\d+px-/,'/600px-') : ev.image;
             img.style.maxWidth = '32%'; img.style.height = '150px'; img.style.objectFit = 'cover';
             stack.appendChild(img);
-            /* add fallback unsplash/picsum only if API image missing */
             if (!data.thumbnail) addFallbacks(ev);
           })
-          .catch(() => addFallbacks(ev));   /* 2. static fallbacks */
-  
-        /* text always */
+          .catch(() => addFallbacks(ev));
+
+        /* text */
         document.getElementById('modalTitle').textContent  = ev.title;
         document.getElementById('modalYear').textContent   = ev.date.slice(0,4);
         document.getElementById('modalDesc').textContent   = ev.description;
         document.getElementById('modalSource').textContent = ev.source;
+
         modal.style.display = 'flex';
       }
   
