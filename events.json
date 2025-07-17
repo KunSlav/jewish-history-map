@@ -5,8 +5,8 @@
     "date": "0006-01-01",
     "lat": 31.78,
     "lng": 35.22,
-    "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/Sulpicius_Quirinius.jpg/640px-Sulpicius_Quirinius.jpg",
-    "keyword": "roman-census-judea",
+    "wikiTitle": "Census_of_Quirinius",
+    "keyword": "roman census judea",
     "description": "Roman governor Publius Sulpicius Quirinius orders a census; Jewish landowners must register in ancestral towns, causing temporary displacement.",
     "source": "Josephus, Antiquities 18.1–4"
   },
@@ -16,8 +16,8 @@
     "date": "0019-01-01",
     "lat": 41.89,
     "lng": 12.49,
-    "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0c/Tiberius_Musei_Capitolini_MC561.jpg/640px-Tiberius_Musei_Capitolini_MC561.jpg",
-    "keyword": "tiberius-rome-exile",
+    "wikiTitle": "History_of_the_Jews_in_the_Roman_Empire#Under_Tiberius",
+    "keyword": "tiberius rome expulsion",
     "description": "Tiberius expels the Jewish community of Rome to Sardinia after disturbances linked to proselytism.",
     "source": "Tacitus, Annals 2.85"
   },
@@ -27,8 +27,8 @@
     "date": "0019-06-01",
     "lat": 39.22,
     "lng": 9.11,
-    "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2e/Sardinia_satellite.jpg/640px-Sardinia_satellite.jpg",
-    "keyword": "sardinia-ancient-roman",
+    "wikiTitle": "Sardinia",
+    "keyword": "sardinia ancient roman",
     "description": "4,000 adult Jewish males deported to Sardinia for compulsory military service in malaria-control units.",
     "source": "Suetonius, Tiberius 36"
   },
@@ -38,8 +38,8 @@
     "date": "0041-01-01",
     "lat": 41.89,
     "lng": 12.49,
-    "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Claudius_crop.jpg/640px-Claudius_crop.jpg",
-    "keyword": "claudius-rome-decree",
+    "wikiTitle": "Claudius",
+    "keyword": "claudius rome decree",
     "description": "Emperor Claudius issues an edict forbidding Jews to assemble and expels the most vocal agitators.",
     "source": "Cassius Dio 60.6"
   },
@@ -49,8 +49,8 @@
     "date": "0070-08-01",
     "lat": 31.78,
     "lng": 35.22,
-    "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3d/Arch_of_Titus_Menorah.jpg/640px-Arch_of_Titus_Menorah.jpg",
-    "keyword": "arch-of-titus-jerusalem",
+    "wikiTitle": "Arch_of_Titus",
+    "keyword": "arch of titus jerusalem",
     "description": "After the fall of Jerusalem, Vespasian imposes the Fiscus Judaicus; land and temple treasures confiscated; survivors dispersed.",
     "source": "Josephus, Jewish War 7.218"
   },
@@ -60,8 +60,8 @@
     "date": "0071-01-01",
     "lat": 31.78,
     "lng": 35.22,
-    "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2d/Sack_of_Jerusalem.JPG/640px-Sack_of_Jerusalem.JPG",
-    "keyword": "roman-enslavement-jews",
+    "wikiTitle": "Siege_of_Jerusalem_(70_CE)",
+    "keyword": "roman enslavement jerusalem",
     "description": "97,000 captives sold at auction; many shipped to Egypt, Cyrene and Italy.",
     "source": "Josephus, Jewish War 6.418–9"
   },
@@ -71,8 +71,8 @@
     "date": "0115-12-01",
     "lat": 32.11,
     "lng": 20.12,
-    "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4d/Cyrene_Ruins.jpg/640px-Cyrene_Ruins.jpg",
-    "keyword": "cyrene-ruins-revolt",
+    "wikiTitle": "Diaspora_Revolt",
+    "keyword": "cyrene revolt ruins",
     "description": "After the revolt, Hadrian forbids Jews to reside in Cyrene; survivors relocated elsewhere in the empire.",
     "source": "Eusebius, Chronicle 2.166"
   },
@@ -82,8 +82,8 @@
     "date": "0135-08-01",
     "lat": 31.78,
     "lng": 35.22,
-    "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0c/Bar_Kokhba_tetradrachm.jpg/640px-Bar_Kokhba_tetradrachm.jpg",
-    "keyword": "bar-kokhba-coin",
+    "wikiTitle": "Bar_Kokhba_revolt",
+    "keyword": "bar kokhba coin",
     "description": "Hadrian bans circumcision and renames the province Syria Palaestina; surviving Jewish population expelled from Jerusalem and its environs.",
     "source": "Cassius Dio 69.12–14"
   }
