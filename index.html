@@ -109,68 +109,79 @@
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script>
     let events = [];
-
+  
     fetch('events.json')
       .then(r => r.json())
       .then(data => { events = data; initApp(); })
       .catch(err => console.error('Failed to load events.json:', err));
-
-    function initApp(){
+  
+    async function initApp(){
       const map = L.map('map').setView([32, 20], 4);
       L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
                   {attribution:'©OpenStreetMap ©CARTO'}).addTo(map);
-
+  
       const layerGroup = L.layerGroup().addTo(map);
-
+  
       const slider   = document.getElementById('slider');
       const playBtn  = document.getElementById('playBtn');
       const dateLbl  = document.getElementById('dateLabel');
-
+  
       const minYear = 0;
       const maxYear = 140;
-
+  
       let playing = false;
       let timer;
-
+  
       function yearFromVal(v){ return minYear + parseInt(v); }
-
+  
       /* ---------- modal helpers ---------- */
       const modal    = document.getElementById('eventModal');
       const closeBtn = document.querySelector('.modal-close');
-
+  
       function openModal(ev){
         const stack = document.getElementById('imgStack');
         stack.innerHTML = '';
-
-        // 1. guaranteed Wikimedia (no fallback removal)
-        const wiki = document.createElement('img');
-        wiki.src = ev.image || 'https://via.placeholder.com/600x250?text=No+Image';
-        wiki.style.maxWidth = '32%'; wiki.style.height = '150px'; wiki.style.objectFit = 'cover';
-        stack.appendChild(wiki);
-
-        // 2. optional Unsplash / Picsum with fallback
-        const aux = [
-          `https://source.unsplash.com/600x250/?${ev.keyword}&sig=${ev.id}`,
-          `https://picsum.photos/600/250?random=${ev.id}`
-        ];
-        aux.forEach(src=>{
-          const img = document.createElement('img');
-          img.src = src;
-          img.style.maxWidth = '32%'; img.style.height = '150px'; img.style.objectFit = 'cover';
-          img.onerror = () => img.remove();
-          stack.appendChild(img);
-        });
-
+  
+        /* 1. try Wikimedia REST API -------------------- */
+        const wikiTitle = ev.wikiTitle || ev.title.replace(/ /g,'_');
+        fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(wikiTitle)}?origin=*`)
+          .then(r => r.ok ? r.json() : Promise.reject())
+          .then(data => {
+            const img = document.createElement('img');
+            img.src = data.thumbnail ? data.thumbnail.source.replace(/\/\d+px-/,'/600px-') : ev.image;
+            img.style.maxWidth = '32%'; img.style.height = '150px'; img.style.objectFit = 'cover';
+            stack.appendChild(img);
+            /* add fallback unsplash/picsum only if API image missing */
+            if (!data.thumbnail) addFallbacks(ev);
+          })
+          .catch(() => addFallbacks(ev));   /* 2. static fallbacks */
+  
+        /* text always */
         document.getElementById('modalTitle').textContent  = ev.title;
         document.getElementById('modalYear').textContent   = ev.date.slice(0,4);
         document.getElementById('modalDesc').textContent   = ev.description;
         document.getElementById('modalSource').textContent = ev.source;
-
         modal.style.display = 'flex';
       }
+  
+      function addFallbacks(ev){
+        const urls = [
+          ev.image,
+          `https://source.unsplash.com/600x250/?${ev.keyword || 'ancient'}&sig=${ev.id}`,
+          `https://picsum.photos/600/250?random=${ev.id}`
+        ].filter(Boolean);
+        urls.forEach(src=>{
+          const img = document.createElement('img');
+          img.src = src;
+          img.style.maxWidth = '32%'; img.style.height = '150px'; img.style.objectFit = 'cover';
+          img.onerror = ()=> img.remove();
+          document.getElementById('imgStack').appendChild(img);
+        });
+      }
+  
       closeBtn.onclick = () => modal.style.display = 'none';
       window.onclick   = e => { if (e.target === modal) modal.style.display = 'none'; };
-
+  
       /* ---------- render & timeline ---------- */
       function render(year){
         layerGroup.clearLayers();
@@ -186,9 +197,9 @@
           });
         dateLbl.textContent = year;
       }
-
+  
       slider.addEventListener('input', ()=>render(yearFromVal(slider.value)));
-
+  
       playBtn.addEventListener('click', ()=>{
         if(playing){
           clearInterval(timer);
@@ -209,7 +220,7 @@
           },200);
         }
       });
-
+  
       render(minYear);
     }
   </script>
