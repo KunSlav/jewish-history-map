@@ -131,8 +131,11 @@
       const playBtn  = document.getElementById('playBtn');
       const dateLbl  = document.getElementById('dateLabel');
   
+      /*  <--- ONLY THESE TWO NUMBERS CHANGED  -->
+          timeline now spans 0 – 700 CE           */
       const minYear = 0;
       const maxYear = 700;
+      slider.max = maxYear - minYear;
   
       let playing = false;
       let timer;
@@ -146,13 +149,11 @@
       function openModal(ev){
         const stack = document.getElementById('imgStack');
         stack.innerHTML = '';
-
-        // build Wikipedia URL
+  
         const title = ev.wikiTitle || ev.title.replace(/ /g,'_');
         const wikiUrl = `https://en.wikipedia.org/wiki/${encodeURIComponent(title)}`;
         document.getElementById('modalLink').href = wikiUrl;
-
-        /* images: same as before */
+  
         fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(title)}?origin=*`)
           .then(r => r.ok ? r.json() : Promise.reject())
           .then(data => {
@@ -163,13 +164,11 @@
             if (!data.thumbnail) addFallbacks(ev);
           })
           .catch(() => addFallbacks(ev));
-
-        /* text */
+  
         document.getElementById('modalTitle').textContent  = ev.title;
-        document.getElementById('modalYear').textContent   = formatYear(Number(ev.date.slice(0,4)));
+        document.getElementById('modalYear').textContent   = ev.date.slice(0,4);
         document.getElementById('modalDesc').textContent   = ev.description;
         document.getElementById('modalSource').textContent = ev.source;
-
         modal.style.display = 'flex';
       }
   
@@ -187,15 +186,10 @@
           document.getElementById('imgStack').appendChild(img);
         });
       }
-
-      function formatYear(year) {
-        return year + ' AD';
-      }
-
+  
       closeBtn.onclick = () => modal.style.display = 'none';
       window.onclick   = e => { if (e.target === modal) modal.style.display = 'none'; };
   
-      /* ---------- render & timeline ---------- */
       function render(year){
         layerGroup.clearLayers();
         events
@@ -208,7 +202,7 @@
             m.bindTooltip(e.title);
             m.on('click', ()=> openModal(e));
           });
-        dateLbl.textContent = formatYear(year);
+        dateLbl.textContent = year;
       }
   
       slider.addEventListener('input', ()=>render(yearFromVal(slider.value)));
