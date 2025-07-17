@@ -7,7 +7,7 @@
     "lng": 35.22,
     "wikiTitle": "Census_of_Quirinius",
     "keyword": "roman census judea",
-    "description": "Roman governor Publius Sulpicius Quirinius orders a census; Jewish landowners must register in ancestral towns, causing temporary displacement.",
+    "description": "Roman governor Publius Sulpicius Quirinius orders the first formal census of Judaea; Jewish landowners are compelled to register in their ancestral towns, triggering widespread temporary displacement and laying the fiscal groundwork for direct Roman rule.",
     "source": "Josephus, Antiquities 18.1–4"
   },
   {
@@ -18,8 +18,8 @@
     "lng": 12.49,
     "wikiTitle": "History_of_the_Jews_in_the_Roman_Empire#Under_Tiberius",
     "keyword": "tiberius rome expulsion",
-    "description": "Tiberius expels the Jewish community of Rome to Sardinia after disturbances linked to proselytism.",
-    "source": "Tacitus, Annals 2.85"
+    "description": "After disturbances linked to proselytism and alleged fraud, Emperor Tiberius expels the entire Jewish community of Rome; 4,000 adult males are deported to Sardinia for forced military service in malaria-control units.",
+    "source": "Tacitus, Annals 2.85; Suetonius, Tiberius 36"
   },
   {
     "id": "sardinia_deportees_19",
@@ -29,7 +29,7 @@
     "lng": 9.11,
     "wikiTitle": "Sardinia",
     "keyword": "sardinia ancient roman",
-    "description": "4,000 adult Jewish males deported to Sardinia for compulsory military service in malaria-control units.",
+    "description": "Roman authorities settle 4,000 Jewish deportees on Sardinia, assigning them to military garrisons and agricultural colonies. The island’s harsh climate and endemic malaria make the deportation tantamount to a death sentence for many.",
     "source": "Suetonius, Tiberius 36"
   },
   {
@@ -40,7 +40,7 @@
     "lng": 12.49,
     "wikiTitle": "Claudius",
     "keyword": "claudius rome decree",
-    "description": "Emperor Claudius issues an edict forbidding Jews to assemble and expels the most vocal agitators.",
+    "description": "Emperor Claudius bans Jewish public gatherings and expels the most vocal agitators, citing riots stirred by ‘Chrestus’. The measure effectively criminalizes communal worship and accelerates the dispersion of Rome’s Jewish population.",
     "source": "Cassius Dio 60.6"
   },
   {
@@ -51,7 +51,7 @@
     "lng": 35.22,
     "wikiTitle": "Arch_of_Titus",
     "keyword": "arch of titus jerusalem",
-    "description": "After the fall of Jerusalem, Vespasian imposes the Fiscus Judaicus; land and temple treasures confiscated; survivors dispersed.",
+    "description": "Following the destruction of the Temple, Vespasian imposes the Fiscus Judaicus: a two-denarii poll-tax on every Jew in the Empire. Temple treasures are confiscated and paraded through Rome; surviving Jerusalemites are sold into slavery or dispersed across the provinces.",
     "source": "Josephus, Jewish War 7.218"
   },
   {
@@ -62,7 +62,7 @@
     "lng": 35.22,
     "wikiTitle": "Siege_of_Jerusalem_(70_CE)",
     "keyword": "roman enslavement jerusalem",
-    "description": "97,000 captives sold at auction; many shipped to Egypt, Cyrene and Italy.",
+    "description": "Roman troops auction 97,000 captives at the Syrian slave markets; families are split, with large contingents shipped to Egypt, Cyrene, and Italy to work imperial estates and amphitheatre projects.",
     "source": "Josephus, Jewish War 6.418–9"
   },
   {
@@ -73,7 +73,7 @@
     "lng": 20.12,
     "wikiTitle": "Diaspora_Revolt",
     "keyword": "cyrene revolt ruins",
-    "description": "After the revolt, Hadrian forbids Jews to reside in Cyrene; survivors relocated elsewhere in the empire.",
+    "description": "After the Diaspora Revolt, Emperor Hadrian prohibits Jews from residing in Cyrenaica and Cyprus; surviving communities are forcibly relocated to coastal refuges and lose civic rights.",
     "source": "Eusebius, Chronicle 2.166"
   },
   {
@@ -84,7 +84,62 @@
     "lng": 35.22,
     "wikiTitle": "Bar_Kokhba_revolt",
     "keyword": "bar kokhba coin",
-    "description": "Hadrian bans circumcision and renames the province Syria Palaestina; surviving Jewish population expelled from Jerusalem and its environs.",
+    "description": "Hadrian bans circumcision, renames Judaea ‘Syria Palaestina’, and expels virtually all remaining Jews from Jerusalem and its environs, converting the district into a Roman veteran colony.",
     "source": "Cassius Dio 69.12–14"
+  },
+  {
+    "id": "constantine_315",
+    "title": "Constantine’s Edict on Jews holding office",
+    "date": "0315-01-01",
+    "lat": 41.89,
+    "lng": 12.49,
+    "wikiTitle": "Constantine_the_Great_and_Judaism",
+    "keyword": "constantine rome decree",
+    "description": "Constantine I bars Jews from holding municipal offices and forbids them from owning Christian slaves, inaugurating a policy of legal segregation that will echo across Late Antiquity.",
+    "source": "Codex Theodosianus 16.8.1"
+  },
+  {
+    "id": "justinian_novella_553",
+    "title": "Justinian’s Novella 146 – suppression of synagogue Greek",
+    "date": "0553-08-01",
+    "lat": 41.89,
+    "lng": 12.49,
+    "wikiTitle": "Novella_146",
+    "keyword": "justinian byzantine synagogue",
+    "description": "Emperor Justinian I forbids the use of Greek in synagogue liturgy and annuls Jewish civil jurisdiction, stripping communities of autonomy and forcing Hellenized Jews into Latin-speaking churches or exile.",
+    "source": "Corpus Juris Civilis, Novellae 146"
+  },
+  {
+    "id": "persian_deportation_614",
+    "title": "Persian conquest – deportation of Jerusalem’s Jews",
+    "date": "0614-05-01",
+    "lat": 31.78,
+    "lng": 35.22,
+    "wikiTitle": "Siege_of_Jerusalem_(614)",
+    "keyword": "jerusalem persian siege",
+    "description": "After a three-week siege, the Sasanian army captures Jerusalem and deports an estimated 35,000–60,000 Jews to Persia; the city’s Jewish quarter is razed and survivors resettled in Mesopotamia.",
+    "source": "Sebeos, History 30–31"
+  },
+  {
+    "id": "visigothic_expulsion_694",
+    "title": "Visigothic decree – forced baptism or exile",
+    "date": "0694-11-01",
+    "lat": 40.41,
+    "lng": -3.70,
+    "wikiTitle": "Visigothic_law_code",
+    "keyword": "visigothic spain jews",
+    "description": "King Egica promulgates the XVII Council of Toledo, ordering the enslavement of Jews who refuse baptism, confiscation of property, and expulsion across the Pyrenees, effectively ending Jewish life in Visigothic Hispania.",
+    "source": "Concilio XVII de Toledo, Canon 8"
+  },
+  {
+    "id": "umayyad_deportation_705",
+    "title": "Umayyad resettlement after the conquest of Hispania",
+    "date": "0705-01-01",
+    "lat": 35.68,
+    "lng": -5.32,
+    "wikiTitle": "Umayyad_conquest_of_Hispania",
+    "keyword": "umayyad spain resettlement",
+    "description": "Following the Umayyad victory at Guadalete, thousands of Visigothic Jews are relocated to North-African garrisons (Ifriqiya, Tangier) to strengthen Muslim administration and provide skilled urban labor.",
+    "source": "Ibn ʿAbd al-Ḥakam, Futūḥ Miṣr 1.187"
   }
 ]
